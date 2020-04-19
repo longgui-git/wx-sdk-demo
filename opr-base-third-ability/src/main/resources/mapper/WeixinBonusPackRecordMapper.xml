@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.trawe.operation.base.third.dbaccess.mapper.WeixinBonusPackRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.trawe.operation.base.third.dbaccess.domain.WeixinBonusPackRecord">
+        <id column="id" property="id" />
+        <result column="openid" property="openid" />
+        <result column="recharge" property="recharge" />
+        <result column="state" property="state" />
+        <result column="sent_time" property="sentTime" />
+        <result column="pay_time" property="payTime" />
+        <result column="order_no" property="orderNo" />
+        <result column="out_order_no" property="outOrderNo" />
+        <result column="trade_no" property="tradeNo" />
+        <result column="source" property="source" />
+        <result column="remark" property="remark" />
+        <result column="pack_title" property="packTitle" />
+        <result column="pack_cover" property="packCover" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, openid, recharge, state, sent_time, pay_time, order_no, out_order_no, trade_no, source, remark, pack_title, pack_cover, create_time, update_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cn.trawe.operation.base</groupId>
+	<artifactId>opr-base-third-ability</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>opr-base-third-ability</name>
+	<description>shanxi user operation service</description>
+
+	<parent>
+		<groupId>cn.trawe.operation.base</groupId>
+		<artifactId>opr-base-third-ability-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<profiles>
+		<profile>
+			<!-- 开发环境 -->
+			<id>DEV</id>
+			<properties>
+				<!--<twp-eureka-url>http://localhost:18000/eureka/</twp-eureka-url>-->
+				<twp-meta-server-url>http://192.168.6.38:8080,http://192.168.6.39:8080</twp-meta-server-url>
+				<twp-app-id>twp-sx-pub-config-dev</twp-app-id>
+				<env>DEV</env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<!-- 开发环境-云通卡 -->
+			<id>DEV_SX</id>
+			<properties>
+				<twp-meta-server-url>http://192.168.6.38:8080,http://192.168.6.39:8080</twp-meta-server-url>
+				<twp-app-id>twp-sx-pub-config-dev</twp-app-id>
+				<env>DEV</env>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 测试环境 -->
+			<id>FAT</id>
+			<properties>
+				<twp-meta-server-url>http://192.168.6.4:8080</twp-meta-server-url>
+				<twp-app-id>opr-base-third-ability</twp-app-id>
+				<env>FAT</env>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 预发环境 -->
+			<id>UAT</id>
+			<properties>
+				<twp-meta-server-url>http://10.172.11.241:8080,http://10.172.11.239:8080</twp-meta-server-url>
+				<twp-app-id>twp-sx-pub-config-uat</twp-app-id>
+				<env>UAT</env>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 生产环境 -->
+			<id>PRO</id>
+			<properties>
+				<twp-meta-server-url>http://172.18.2.121:8080,http://172.18.2.122:8080</twp-meta-server-url>
+				<twp-app-id>operation-yn-pub-config</twp-app-id>
+				<env>PRO</env>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 网发环境 -->
+			<id>NETPUB</id>
+			<properties>
+				<twp-meta-server-url>http://192.168.6.95:8080</twp-meta-server-url>
+				<twp-app-id>twp-sx-pub-config-net</twp-app-id>
+				<env>NETPUB</env>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.trawe</groupId>
+			<artifactId>util</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-slf4j-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.trawe</groupId>
+			<artifactId>service-common</artifactId>
+			<version>2.0.0-RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>cn.trawe</groupId>
+			<artifactId>util</artifactId>
+			<version>1.3.0-RELEASE</version>
+		</dependency>
+
+		<!--日志 -->
+		<dependency>
+			<groupId>cn.trawe</groupId>
+			<artifactId>tw-lib-log</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<!--阿波罗配置中心 -->
+		<dependency>
+			<groupId>com.ctrip.framework.apollo</groupId>
+			<artifactId>apollo-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ctrip.framework.apollo</groupId>
+			<artifactId>apollo-client</artifactId>
+		</dependency>
+		
+		<!--数据库访问库 -->
+		<dependency>
+			<groupId>cn.trawe.pay</groupId>
+			<artifactId>tw-lib-easyorm-dao</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.alibaba</groupId>
+					<artifactId>druid-spring-boot-starter</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.5</version>
+		</dependency>
+		
+		<!--mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<!--mybatis -->
+		<!-- <dependency> <groupId>org.mybatis.spring.boot</groupId> <artifactId>mybatis-spring-boot-starter</artifactId> 
+			</dependency> -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<!-- mybatis-plus -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+		<!-- mybatisPlus 初始化实体类 dao层的工具依赖 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-generator</artifactId>
+			<version>3.3.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>mybatis</artifactId>
+					<groupId>org.mybatis</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity-engine-core</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.2</version>
+		</dependency>
+		<!-- redis -->
+		<dependency>
+			<groupId>cn.trawe.pay</groupId>
+			<artifactId>tw-lib-redis</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j-slf4j-impl</artifactId>
+					<groupId>org.apache.logging.log4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Swagger -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.7.0</version>
+		</dependency>
+		<!-- <dependency> <groupId>com.github.xiaoymin</groupId> <artifactId>swagger-bootstrap-ui</artifactId> 
+			<version>1.9.3</version> </dependency> -->
+
+		<!-- dom4j -->
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+
+		<!-- dom4j -->
+		<!-- <dependency> <groupId>org.apache.ws.commons.axiom</groupId> <artifactId>axiom-api</artifactId> 
+			<version>1.2.13</version> </dependency> -->
+
+		<!-- axis2 -->
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-adb</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-http</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-transport-local</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		<!-- 短信 -->
+		<dependency>
+			<groupId>cn.trawe.pay</groupId>
+			<artifactId>twp-svc-sms-mail-expose</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.trawe.pay</groupId>
+			<artifactId>tw-lib-common</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- 图片压缩 -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.trawe.operation.base</groupId>
+			<artifactId>opr-base-third-ability-expose</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>5.1.10.RELEASE</version>
+		</dependency>
+
+
+
+
+
+
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- <build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.yml</include>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources/mapping</directory>
+				<includes>
+					<include>*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build> -->
+	<build>
+        <finalName>opr-base-third-ability</finalName>
+        <resources>
+            <resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.yml</include>
+					<include>*.properties</include>
+					<include>*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <configuration>
+                        <encoding>utf-8</encoding>
+                        <useDefaultDelimiters>true</useDefaultDelimiters>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+        	<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                   <execution>
+                      <goals>
+                          <goal>repackage</goal>
+                      </goals>
+                   </execution>
+                </executions>
+                <configuration>
+                   <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.11</version>
+                <configuration>
+                    <imageName>${project.artifactId}</imageName>
+                    <imageTags>
+                        <imageTag>latest</imageTag>
+                    </imageTags>
+                    <forceTags>true</forceTags>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

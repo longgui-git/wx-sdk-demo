@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--应用名-->
+    <property name="APP_NAME" value="opr-base-third-ability" />
+    <!--日志根目录-->
+    <property name="LOG_HOME" value="/data/applog" />
+    <!--日志通用输出格式-->
+	<property name="APPLOG_PATTERN_COMMON" value="[%d{yyyy-MM-dd} %d{HH:mm:ss.SSS}][%level][${APP_NAME}][%thread][%logger{50}][%method] ::: %msg %n"/>
+
+	<!--业务日志-->
+    <appender name="appLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/${APP_NAME}/${APP_NAME}-${HOSTNAME}-appLog-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>20MB</maxFileSize><!-- 触发策略，达到一定条件时将通知appender，触发滚动 -->
+        </rollingPolicy>
+        <encoder>
+            <Pattern>${APPLOG_PATTERN_COMMON}</Pattern>
+        </encoder>
+    </appender>
+
+    <!--业务摘要 日志-->
+    <appender name="appDigest" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY </onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_HOME}/${APP_NAME}/${APP_NAME}-${HOSTNAME}-digest.%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>500MB</maxFileSize><!-- 触发策略，达到一定条件时将通知appender，触发滚动 -->
+        </rollingPolicy>
+        <encoder>
+            <Pattern>
+                <!--时间,日志级别, traceid, [(业务类型)(接口名称 方法,接口版本号, 处理结果,耗时)(结果码)(请求参数列表)]-->
+                %d{yyyy-MM-dd} %d{HH:mm:ss.SSS},%-5level,%X{X-B3-TraceId},[%X{bizType},%X{interfaceName},%X{version},%X{result},%X{cost},%X{resultCode},%msg] %n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.ptc.board.log.proxy.CommonDigestProxy">
+        <appender-ref ref="appDigest"/>
+    </logger>
+
+    <!--TODO 此处改为自身应用系统的包名 线上使用info及以上级别-->
+    <logger name="cn.trawe.wechat.chongqing" level="debug">
+        <appender-ref ref="appLog"/>
+    </logger>
+
+    <logger name="cn.trawe" level="info">
+        <appender-ref ref="appLog"/>
+    </logger>
+
+    <!--开发控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${APPLOG_PATTERN_COMMON}</Pattern>
+        </encoder>
+    </appender>
+    
+    <!--TODO 此处改为自身应用系统的包名 线上使用info及以上级别-->
+    <root level="INFO">
+        <appender-ref ref="console" />
+    </root>
+
+</configuration>

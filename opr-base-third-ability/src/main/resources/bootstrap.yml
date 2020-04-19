@@ -1,0 +1,9 @@
+apollo:
+  bootstrap:
+    enabled: true   #注入默认application namespace的配置示例
+    namespaces: yn-operation-eureka-cli,yn-pub-redis-config,yn-pub-db-config,opr-base-third-ability
+  meta: ${twp-meta-server-url}
+
+app:
+  #应用的身份信息，如果服务暂时没有私有配置，直接指定公共配置的应用id：twp-pay-pub-config
+  id: ${twp-app-id}

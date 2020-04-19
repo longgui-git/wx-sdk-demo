@@ -1,0 +1,43 @@
+server:
+  port: 21090
+
+spring:
+  application:
+    name: opr-base-third-ability
+#  cloud: #本地根据需要配置，如果该服务无需被其他服务调用，此处可不配置
+#    inetutils:  #通过vpn拨入公司后，需要把本地网卡忽略，以vpn后的地址注册入注册中心
+#      ignored-interfaces: # 忽略docker0网卡以及所有以en开头的网卡，以下两项，根据本机实际配置,不用提交到git上
+#        - docker0
+#        - en.*
+
+    
+#重庆配置 
+chongqing: 
+  webservice: 
+    url: http://aa.com:18051/ETCWS/services/WechatService #webservice地址
+  image: 
+    uploadUrl:  http://aa.com:18051/fileload/{0}?{1}={2}&source=ZFB   #重庆图片上传地址
+    tempPath: E:\data\test  #合并图片临时地址
+sms: 
+  smsnurl: http://192.168.6.236:18010/msg/sms/send
+  templateid: 303190
+
+swagger2.api.doc.enable: true 
+
+eureka:
+  instance:
+    prefer-ip-address: true
+#eureka:
+#  instance:
+#    appname: ${spring.application.name}
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#  client:
+#    service-url:
+#      defaultZone: http://127.0.0.1:18050/eureka/
+#    healthcheck:
+#      enabled: true
+
+#mybatis:
+#  mapper-locations: classpath:mapper/*Mapper.xml
+#  configuration:
+#      map-underscore-to-camel-case: true
